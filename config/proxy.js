@@ -8,8 +8,8 @@
 export default {
   dev: {
     '/MyBlog/': {
-      // target: 'https://lczeros.cn/',
-      target: 'http://127.0.0.1:8081/',
+      target: 'https://lczeros.cn/',
+      // target: 'http://127.0.0.1:8081/',
       changeOrigin: true,
       pathRewrite: {
         '^': '',

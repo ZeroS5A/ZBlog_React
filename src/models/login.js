@@ -7,27 +7,27 @@ import { getPageQuery } from '@/utils/utils';
 const Model = {
   namespace: 'login',
   state: {
-    status: { name: 'ZEROS'},
-    currentUser: null
+    status: { name: 'ZEROS' },
+    currentUser: null,
   },
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
       yield put({
         type: 'changeLoginStatus',
-        payload: response
-      }); 
+        payload: response,
+      });
 
       if (response.code === 200) {
-        //存储用户数据
+        // 存储用户数据
         yield put({
           type: 'saveCurrentUser',
-          payload: response
+          payload: response,
         }); // Login successfully
-        //设置token
-        localStorage.setItem('token', response.data.token)
-        //设置用户数据
-        localStorage.setItem('UserData', JSON.stringify(response.data.UserData))
+        // 设置token
+        localStorage.setItem('token', response.data.token);
+        // 设置用户数据
+        localStorage.setItem('UserData', JSON.stringify(response.data.UserData));
 
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
@@ -56,17 +56,17 @@ const Model = {
       yield call(getFakeCaptcha, payload);
     },
 
-    *logout({ payload }, {put}) {
+    *logout({ put }) {
       const { redirect } = getPageQuery(); // Note: There may be security issues, please note
-      console.log("登出")
-      //登出操作，清空currentUser、token
-      localStorage.clear()
+      console.log('登出');
+      // 登出操作，清空currentUser、token
+      localStorage.clear();
       yield put({
         type: 'delUserData',
         payload: {
-          data:{UserData: null}
-        }
-      }); 
+          data: { UserData: null },
+        },
+      });
 
       if (window.location.pathname !== '/user/login' && !redirect) {
         router.replace({
@@ -79,13 +79,13 @@ const Model = {
     },
   },
   reducers: {
-    delUserData(state){
+    delUserData(state) {
       return {
         ...state,
-        currentUser: null ,
+        currentUser: null,
       };
     },
-    changeLoginStatus(state, { payload },) {
+    changeLoginStatus(state, { payload }) {
       return { ...state, status: payload.code, type: payload.type };
     },
     saveCurrentUser(state, { payload }) {
@@ -93,18 +93,18 @@ const Model = {
       return {
         ...state,
         currentUser: payload.data.UserData,
-        status:payload.code
+        status: payload.code,
       };
     },
-    //保存从本地获取的用户数据
-    saveUserData(state, { payload }){
+    // 保存从本地获取的用户数据
+    saveUserData(state, { payload }) {
       setAuthority(payload.role);
       return {
         ...state,
         currentUser: payload,
-        status: 200
+        status: 200,
       };
-    }
+    },
   },
 };
 export default Model;

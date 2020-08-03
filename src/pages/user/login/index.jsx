@@ -1,12 +1,13 @@
-import { Alert, Checkbox, Icon, Button } from 'antd';
-import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
+import { Alert, Checkbox } from 'antd';
+import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import React, { Component } from 'react';
-import { Link } from 'umi';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import md5 from 'js-md5';
 import { connect } from 'dva';
 import LoginComponents from './components/Login';
 import styles from './style.less';
 
-const { Tab, UserName, Password, Mobile, Captcha, Submit } = LoginComponents;
+const { Tab, UserName, Password, Submit } = LoginComponents;
 
 class Login extends Component {
   loginForm = undefined;
@@ -27,7 +28,10 @@ class Login extends Component {
 
     if (!err) {
       const { dispatch } = this.props;
-      //dispatch调用models中的函数
+      // md5一次密码
+      // eslint-disable-next-line no-param-reassign
+      values.password = md5(values.password);
+      // dispatch调用models中的函数
       dispatch({
         type: 'login/login',
         payload: { ...values, type },
@@ -79,7 +83,7 @@ class Login extends Component {
 
   render() {
     const { userLogin = {}, submitting } = this.props;
-    const { status, type: loginType } = userLogin;
+    const { status } = userLogin;
     const { type, autoLogin } = this.state;
     return (
       <div className={styles.main}>
@@ -97,7 +101,8 @@ class Login extends Component {
               id: 'user-login.login.tab-login-credentials',
             })}
           >
-            {status === 302  && !submitting &&
+            {status === 302 &&
+              !submitting &&
               this.renderMessage(
                 formatMessage({
                   id: 'user-login.login.message-invalid-credentials',
@@ -105,7 +110,7 @@ class Login extends Component {
               )}
             <UserName
               name="userName"
-              placeholder={'用户名'}
+              placeholder="用户名"
               rules={[
                 {
                   required: true,
@@ -117,7 +122,7 @@ class Login extends Component {
             />
             <Password
               name="password"
-              placeholder={'密码'}
+              placeholder="密码"
               rules={[
                 {
                   required: true,
@@ -169,7 +174,7 @@ class Login extends Component {
                   }),
                 },
               ]}
-            /> 
+            />
             <Captcha
               name="captcha"
               placeholder={formatMessage({
@@ -192,7 +197,7 @@ class Login extends Component {
                 },
               ]}
             />
-          </Tab>*/}
+          </Tab> */}
           <div>
             <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
               <FormattedMessage id="user-login.login.remember-me" />

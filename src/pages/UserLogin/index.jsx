@@ -108,6 +108,8 @@ class Login extends Component {
                   id: 'user-login.login.message-invalid-credentials',
                 }),
               )}
+            {status === 403 && this.renderMessage('非管理员！')}
+            {status === 503 && this.renderMessage('后台错误')}
             <UserName
               name="userName"
               placeholder="用户名"

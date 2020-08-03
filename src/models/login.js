@@ -7,7 +7,7 @@ import { getPageQuery } from '@/utils/utils';
 const Model = {
   namespace: 'login',
   state: {
-    status: { name: 'ZEROS' },
+    status: null,
     currentUser: null,
   },
   effects: {
@@ -18,7 +18,7 @@ const Model = {
         payload: response,
       });
 
-      if (response.code === 200) {
+      if (response.code === 200 && response.data.UserData.role === 'admin') {
         // 存储用户数据
         yield put({
           type: 'saveCurrentUser',
@@ -47,8 +47,14 @@ const Model = {
             return;
           }
         }
-
         router.replace(redirect || '/');
+      } else if (response.code === 200 && response.data.UserData.role !== 'admin') {
+        yield put({
+          type: 'changeLoginStatus',
+          payload: {
+            code: 403,
+          },
+        });
       }
     },
 
@@ -56,9 +62,8 @@ const Model = {
       yield call(getFakeCaptcha, payload);
     },
 
-    *logout({ put }) {
+    *logout(_, { put }) {
       const { redirect } = getPageQuery(); // Note: There may be security issues, please note
-      console.log('登出');
       // 登出操作，清空currentUser、token
       localStorage.clear();
       yield put({

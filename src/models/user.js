@@ -14,7 +14,7 @@ const UserModel = {
       });
     },
 
-    //请求用户数据
+    // 请求用户数据
     *fetchCurrent(_, { call, put }) {
       const response = yield call(queryCurrent);
       yield put({

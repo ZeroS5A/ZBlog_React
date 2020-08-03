@@ -6,7 +6,7 @@ export default [
       {
         name: 'login',
         path: '/user/login',
-        component: './user/login',
+        component: './UserLogin',
       },
     ],
   },
@@ -35,6 +35,7 @@ export default [
             name: 'userAdmin',
             icon: 'TeamOutlined',
             component: './UserAdmin/userAdmin',
+            authority: ['admin'],
           },
           // 博客管理子路由
           {
@@ -42,14 +43,12 @@ export default [
             name: 'blogAdmin',
             icon: 'crown',
             component: './BlogAdmin',
-            authority: ['admin'],
             routes: [
               {
                 path: '/blogAdmin/blog',
                 name: 'blog',
                 icon: 'smile',
                 component: './BlogAdmin',
-                authority: ['admin'],
               },
             ],
           },

@@ -10,15 +10,13 @@ class UserAdmin extends React.Component {
     dispatch({
       type: 'userAdmin/getUserList',
     });
-    // request('/api/currentUser');
   }
 
-  changeBan = (record, index) => {
-    const userList = this.props.userList.slice();
-    const { dispatch } = this.props;
+  changeBan = record => {
+    const { dispatch, userList } = this.props;
     dispatch({
-      type: 'userAdmin/changeRole',
-      payload: { userList, index, userId: record.userId },
+      type: 'userAdmin/changeBan',
+      payload: { record, userList },
     });
   };
 
@@ -53,7 +51,7 @@ class UserAdmin extends React.Component {
           <Switch
             className="switchColor"
             onChange={() => this.changeBan(record, index)}
-            checked={record.role === 'ban'}
+            checked={record.isBan === 1}
           />
         ),
       },

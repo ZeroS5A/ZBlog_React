@@ -1,4 +1,4 @@
-import { getUserList } from '@/services/userAdmin';
+import { getUserList, banUser } from '@/services/userAdmin';
 
 // const { reduce } = require("lodash");
 const Model = {
@@ -14,8 +14,23 @@ const Model = {
       });
     },
 
-    changeRole(payload) {
-      console.log(payload);
+    *changeBan({ payload }, { call, put }) {
+      const { userList, record } = payload;
+      const response = yield call(banUser, record.userId);
+
+      if (response.code === 200) {
+        const index = userList.indexOf(record);
+        if (userList[index].isBan === 1) {
+          userList[index].isBan = 0;
+        } else {
+          userList[index].isBan = 1;
+        }
+        const temp = userList.concat();
+        yield put({
+          type: 'saveUserList',
+          payload: temp,
+        });
+      }
     },
   },
   reducers: {

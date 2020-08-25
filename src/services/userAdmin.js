@@ -10,6 +10,13 @@ export async function getUserList() {
 export async function banUser(userId) {
   return request('/MyBlog/admin/banUser', {
     method: 'POST',
-    data: { userId },
+    data: userId,
+  });
+}
+
+export async function changeRole(userId, role) {
+  return request('/MyBlog/admin/changeRole', {
+    method: 'POST',
+    data: { userId, role },
   });
 }
